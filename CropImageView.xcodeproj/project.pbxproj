@@ -12,6 +12,7 @@
 		C1F28AD61B5E22B4008C8940 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1F28AD51B5E22B4008C8940 /* Images.xcassets */; };
 		C1F28AD91B5E22B4008C8940 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1F28AD71B5E22B4008C8940 /* LaunchScreen.xib */; };
 		C1F28AFF1B5E3389008C8940 /* CropImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F28AFE1B5E3389008C8940 /* CropImageViewController.m */; };
+		C1F28B011B5E3791008C8940 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = C1F28B001B5E3791008C8940 /* image.png */; };
 		E4BE13C60485295412A7EE43 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCA7CE32E67994B624DF78D6 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,7 @@
 		C1F28AD81B5E22B4008C8940 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		C1F28AFD1B5E3389008C8940 /* CropImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropImageViewController.h; sourceTree = "<group>"; };
 		C1F28AFE1B5E3389008C8940 /* CropImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropImageViewController.m; sourceTree = "<group>"; };
+		C1F28B001B5E3791008C8940 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		D9F680152C399F1E8B64BC7F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		FCA7CE32E67994B624DF78D6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -93,6 +95,7 @@
 		C1F28AC81B5E22B4008C8940 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C1F28B001B5E3791008C8940 /* image.png */,
 				C1F28AC91B5E22B4008C8940 /* Info.plist */,
 				C1F28ACA1B5E22B4008C8940 /* main.m */,
 			);
@@ -169,6 +172,7 @@
 			files = (
 				C1F28AD91B5E22B4008C8940 /* LaunchScreen.xib in Resources */,
 				C1F28AD61B5E22B4008C8940 /* Images.xcassets in Resources */,
+				C1F28B011B5E3791008C8940 /* image.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
