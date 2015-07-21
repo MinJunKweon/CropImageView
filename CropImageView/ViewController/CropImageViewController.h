@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CropImageViewController : UIViewController
+@interface CropImageViewController : UIViewController <UIScrollViewDelegate>
 
+@property (nonatomic, strong) UIScrollView *imageScrollView;
+@property (nonatomic, strong) UIImageView *imageView;
 
 - (instancetype)init;
 
