@@ -12,9 +12,11 @@
 		C1F28AD61B5E22B4008C8940 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1F28AD51B5E22B4008C8940 /* Images.xcassets */; };
 		C1F28AD91B5E22B4008C8940 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1F28AD71B5E22B4008C8940 /* LaunchScreen.xib */; };
 		C1F28AFF1B5E3389008C8940 /* CropImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F28AFE1B5E3389008C8940 /* CropImageViewController.m */; };
+		E4BE13C60485295412A7EE43 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCA7CE32E67994B624DF78D6 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		154B022EB33F9E73DA2B28E8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		C1F28AC51B5E22B4008C8940 /* CropImageView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CropImageView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1F28AC91B5E22B4008C8940 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1F28ACA1B5E22B4008C8940 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -24,6 +26,8 @@
 		C1F28AD81B5E22B4008C8940 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		C1F28AFD1B5E3389008C8940 /* CropImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropImageViewController.h; sourceTree = "<group>"; };
 		C1F28AFE1B5E3389008C8940 /* CropImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropImageViewController.m; sourceTree = "<group>"; };
+		D9F680152C399F1E8B64BC7F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		FCA7CE32E67994B624DF78D6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +35,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4BE13C60485295412A7EE43 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A0F992107D1C0DE10DB3928 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				154B022EB33F9E73DA2B28E8 /* Pods.debug.xcconfig */,
+				D9F680152C399F1E8B64BC7F /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		6E95E8EB91A85B744A655F58 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FCA7CE32E67994B624DF78D6 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C1F28ABC1B5E22B4008C8940 = {
 			isa = PBXGroup;
 			children = (
 				C1F28AC71B5E22B4008C8940 /* CropImageView */,
 				C1F28AC61B5E22B4008C8940 /* Products */,
+				2A0F992107D1C0DE10DB3928 /* Pods */,
+				6E95E8EB91A85B744A655F58 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,9 +115,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C1F28AE81B5E22B4008C8940 /* Build configuration list for PBXNativeTarget "CropImageView" */;
 			buildPhases = (
+				4A2DBC376F058C93109DE658 /* Check Pods Manifest.lock */,
 				C1F28AC11B5E22B4008C8940 /* Sources */,
 				C1F28AC21B5E22B4008C8940 /* Frameworks */,
 				C1F28AC31B5E22B4008C8940 /* Resources */,
+				787631A63734F75A1D50A7CC /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -147,6 +173,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4A2DBC376F058C93109DE658 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		787631A63734F75A1D50A7CC /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C1F28AC11B5E22B4008C8940 /* Sources */ = {
@@ -255,6 +314,7 @@
 		};
 		C1F28AE91B5E22B4008C8940 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 154B022EB33F9E73DA2B28E8 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = CropImageView/Info.plist;
@@ -265,6 +325,7 @@
 		};
 		C1F28AEA1B5E22B4008C8940 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D9F680152C399F1E8B64BC7F /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = CropImageView/Info.plist;
