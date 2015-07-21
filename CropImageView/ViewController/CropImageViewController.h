@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CropImageViewController.h
 //  CropImageView
 //
 //  Created by 1000732 on 2015. 7. 21..
@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface CropImageViewController : UIViewController
 
+
+- (instancetype)init;
 
 @end
-

@@ -34,6 +34,20 @@
                ReferencedContainer = "container:CropImageView.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C1F28AF31B5E3375008C8940"
+               BuildableName = "CropImageViewTests copy.xctest"
+               BlueprintName = "CropImageViewTests copy"
+               ReferencedContainer = "container:CropImageView.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -49,6 +63,16 @@
                BlueprintIdentifier = "C1F28ADD1B5E22B4008C8940"
                BuildableName = "CropImageViewTests.xctest"
                BlueprintName = "CropImageViewTests"
+               ReferencedContainer = "container:CropImageView.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C1F28AF31B5E3375008C8940"
+               BuildableName = "CropImageViewTests copy.xctest"
+               BlueprintName = "CropImageViewTests copy"
                ReferencedContainer = "container:CropImageView.xcodeproj">
             </BuildableReference>
          </TestableReference>
