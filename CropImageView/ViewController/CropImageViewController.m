@@ -41,7 +41,7 @@
 
 - (void)initialize
 {
-    UIImage *image = [UIImage imageNamed:@"image.png"];
+    UIImage *image = [UIImage imageNamed:@"Square.png"];
     _imageView.image = image;
     
     _borderView.backgroundColor = [UIColor whiteColor];
