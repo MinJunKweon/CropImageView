@@ -24,6 +24,8 @@
     if (self) {
         _imageScrollView = [[UIScrollView alloc] init];
         _imageView = [[UIImageView alloc] init];
+        _doneButton = [[UIButton alloc] init];
+        _ltrbLabel = [[UILabel alloc] init];
         
         [self initialize];
         [self makeAutoLayoutConstraints];
@@ -47,7 +49,23 @@
     _imageScrollView.delegate = self;
     _imageScrollView.contentMode = UIViewContentModeScaleAspectFit;
     
+    _doneButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    _doneButton.backgroundColor = [UIColor whiteColor];
+    _doneButton.titleLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:30.0f];
+    [_doneButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [_doneButton addTarget:self
+                    action:@selector(done)
+          forControlEvents:UIControlEventTouchUpInside];
+    
+    _ltrbLabel.textColor = [UIColor whiteColor];
+    _ltrbLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:30.0f];
+    _ltrbLabel.numberOfLines = 0;
+    _ltrbLabel.textAlignment = NSTextAlignmentCenter;
+    
     [self.view addSubview:_imageScrollView];
+    [self.view addSubview:_doneButton];
+    [self.view addSubview:_ltrbLabel];
 }
 
 - (void)makeAutoLayoutConstraints
@@ -59,6 +77,18 @@
     
     [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(_imageScrollView);
+    }];
+    
+    [_doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view).with.offset(10.0f);
+        make.right.equalTo(self.view).with.offset(-10.0f);
+        make.bottom.equalTo(self.view).with.offset(-30.0f);
+    }];
+    
+    [_ltrbLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view).with.offset(10.0f);
+        make.right.equalTo(self.view).with.offset(-10.0f);
+        make.bottom.equalTo(_doneButton.mas_top).with.offset(-10.0f);
     }];
 }
 
@@ -92,6 +122,15 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return _imageView;
+}
+
+#pragma mark - Event
+
+- (void)done
+{
+    _ltrbLabel.text = [NSString stringWithFormat:@"%@, %lf", NSStringFromCGPoint(_imageScrollView.contentOffset), _imageScrollView.zoomScale];
+    NSLog(@"offset: %@", NSStringFromCGPoint(_imageScrollView.contentOffset));
+    NSLog(@"scaleFactor: %lf", _imageScrollView.contentScaleFactor);
 }
 
 @end

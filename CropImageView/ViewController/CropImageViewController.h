@@ -13,6 +13,9 @@
 @property (nonatomic, strong) UIScrollView *imageScrollView;
 @property (nonatomic, strong) UIImageView *imageView;
 
+@property (nonatomic, strong) UIButton *doneButton;
+@property (nonatomic, strong) UILabel *ltrbLabel;
+
 - (instancetype)init;
 
 @end
