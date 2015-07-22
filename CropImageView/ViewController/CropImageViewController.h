@@ -6,12 +6,13 @@
 //  Copyright (c) 2015년 1000732. All rights reserved.
 //
 
+@class CropImageView;
+
 #import <UIKit/UIKit.h>
 
-@interface CropImageViewController : UIViewController <UIScrollViewDelegate>
+@interface CropImageViewController : UIViewController
 
-@property (nonatomic, strong) UIScrollView *imageScrollView;
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) CropImageView *imageView;
 
 @property (nonatomic, strong) UIButton *doneButton;
 @property (nonatomic, strong) UILabel *ltrbLabel;
