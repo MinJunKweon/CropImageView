@@ -43,6 +43,7 @@
 {
     UIImage *image = [UIImage imageNamed:@"Square.png"];
     _imageView.image = image;
+    _imageView.maximumScale = 2.0f;
     
     _borderView.backgroundColor = [UIColor whiteColor];
     
@@ -69,8 +70,10 @@
 - (void)makeAutoLayoutConstraints
 {
     [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.left.and.right.equalTo(self.view);
-        make.bottom.equalTo(self.view.mas_centerY).with.offset(30.0f);
+        make.top.equalTo(self.view);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+        make.height.equalTo(@320.0f);
     }];
     
     [_borderView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -105,21 +108,16 @@
     [super viewWillAppear:animated];
 }
 
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-}
-
 #pragma mark - Event
 
 - (void)done
 {
-    NSLog(@"before transform: %@", NSStringFromCGAffineTransform(_imageView.transform));
     [UIView animateWithDuration:.35f animations:^{
-        _imageView.transform = CGAffineTransformMakeRotation(20/M_PI);
+        _imageView.transform = CGAffineTransformRotate(_imageView.transform, M_PI_4);
+    } completion:^(BOOL finished) {
+        NSLog(@"transform : %@", NSStringFromCGAffineTransform(_imageView.transform));
+        NSLog(@"rect : %@", NSStringFromCGRect(_imageView.frame));
     }];
-    NSLog(@"after transform: %@", NSStringFromCGAffineTransform(_imageView.transform));
-    
 //    _ltrbLabel.text = [NSString stringWithFormat:@"%@, %lf", NSStringFromCGPoint(_imageScrollView.contentOffset), _imageScrollView.zoomScale];
 }
 

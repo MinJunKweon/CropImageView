@@ -10,6 +10,13 @@
 
 @interface CropImageView : UIImageView <UIGestureRecognizerDelegate>
 
+/**
+ * Maximum of zoom scale.
+ *
+ * @see 0 is default. if this set 0, non-maximum
+ */
+@property (nonatomic) CGFloat maximumScale;
+
 - (instancetype)init;
 - (instancetype)initWithImage:(UIImage *)image;
 

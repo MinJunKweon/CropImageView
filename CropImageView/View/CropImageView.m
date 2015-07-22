@@ -10,11 +10,18 @@
 
 @interface CropImageView ()
 
-@property (nonatomic) CGRect origin;
+@property (nonatomic) CGSize originSize;
 
 @property (nonatomic) CGFloat previousRotationAngle;
 @property (nonatomic) CGFloat previousPinchScale;
 @property (nonatomic) CGPoint previousPanTranslation;
+
+@property (nonatomic) CGFloat resultRotationAngle;
+@property (nonatomic) CGFloat resultPinchScale;
+@property (nonatomic) CGPoint resultPanTraslation;
+
+@property (nonatomic) CGPoint leftTopPoint;
+@property (nonatomic) CGPoint rightBottomPoint;
 
 @end
 
@@ -29,8 +36,14 @@
 
 - (instancetype)initWithImage:(UIImage *)image
 {
+    return [self initWithImage:image maximumScale:0.0f];
+}
+
+- (instancetype)initWithImage:(UIImage *)image maximumScale:(CGFloat)maximumScale
+{
     self = [super initWithImage:image];
     if (self) {
+        _maximumScale = maximumScale;
         _previousRotationAngle = 0.0f;
         _previousPinchScale = 1.0f;
         _previousPanTranslation = CGPointMake(0, 0);
@@ -55,7 +68,9 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _origin = self.frame;
+    _originSize = self.bounds.size;
+    _leftTopPoint = self.bounds.origin;
+    _rightBottomPoint = CGPointMake(_originSize.width, _originSize.height);
 }
 
 #pragma mark - Gesture Recognizer
@@ -78,7 +93,9 @@
 {
     if (pinchGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGFloat pinchScale = pinchGestureRecognizer.scale - _previousPinchScale + 1.0f;
-        self.transform = CGAffineTransformScale(self.transform, pinchScale, pinchScale);
+        if ((pinchGestureRecognizer.scale <= _maximumScale) || (_maximumScale == 0.0f)) {
+            self.transform = CGAffineTransformScale(self.transform, pinchScale, pinchScale);
+        }
         _previousPinchScale = pinchGestureRecognizer.scale;
     } else if (pinchGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self isInvaildPosition]) {
@@ -109,6 +126,8 @@
 
 - (void)resetTransform
 {
+    _leftTopPoint = self.bounds.origin;
+    _rightBottomPoint = CGPointMake(_originSize.width, _originSize.height);
     [UIView animateWithDuration:.35f animations:^{
         self.transform = CGAffineTransformIdentity;
     }];
@@ -117,8 +136,59 @@
 - (BOOL)isInvaildPosition
 {
 #warning must implement determinant expression
-    return YES;
+    
+    CGFloat angle = atan2(self.transform.b, self.transform.a);
+    if (angle < 0.0f) {
+        angle = angle + M_PI*2;
+    }
+    CGAffineTransform reverseTransform = CGAffineTransformMake(self.transform.a * cos(angle) + self.transform.b * sin(angle),
+                                                               self.transform.b * cos(angle) - self.transform.a * sin(angle),
+                                                               self.transform.c * cos(angle) + self.transform.d * sin(angle),
+                                                               self.transform.d * cos(angle) - self.transform.c * sin(angle),
+                                                               self.transform.tx,
+                                                               self.transform.ty);
+    
+    CGFloat scaleX = sqrt(pow(reverseTransform.a, 2) + pow(reverseTransform.c, 2));
+    CGFloat scaleY = sqrt(pow(reverseTransform.b, 2) + pow(reverseTransform.d, 2));
+    
+    _resultRotationAngle = angle;
+    _resultPinchScale = MAX(scaleX, scaleY);
+    _resultPanTraslation = CGPointMake(reverseTransform.tx, reverseTransform.ty);
+    
+    CGPoint lt = [self leftTopPoint];
+    CGPoint rb = [self rightBottomPoint];
+    NSLog(@"lt: %@", NSStringFromCGPoint(lt));
+    if (lt.x < 0.0f || lt.y < 0.0f || rb.x > _originSize.width || rb.y > _originSize.height) {
+        return YES;
+    }
+    return NO;
 }
+
+- (CGPoint)leftTopPoint
+{
+    CGPoint reverseScalePoint = CGPointMake(_leftTopPoint.x + (_originSize.width - _originSize.width / _resultPinchScale) / 2,
+                                            _leftTopPoint.y + (_originSize.height - _originSize.height / _resultPinchScale) / 2);
+    
+    NSLog(@"sin(%lf): %lf", _resultRotationAngle*180.0f/M_PI, sin(_resultRotationAngle));
+    CGPoint reverseTranslationPoint = CGPointMake(reverseScalePoint.x - _resultPanTraslation.x, reverseScalePoint.y - _resultPanTraslation.y);
+    CGPoint reverseRotationPoint = CGPointMake(reverseTranslationPoint.x * cos(_resultRotationAngle) + reverseTranslationPoint.y * sin(_resultRotationAngle),
+                                               reverseTranslationPoint.y * cos(_resultRotationAngle) - reverseTranslationPoint.x * sin(_resultRotationAngle));
+    _leftTopPoint = reverseRotationPoint;
+    return reverseRotationPoint;
+}
+
+- (CGPoint)rightBottomPoint
+{
+    CGPoint reverseScalePoint = CGPointMake(_rightBottomPoint.x - (_originSize.width - _originSize.width / _resultPinchScale) / 2,
+                                            _rightBottomPoint.y - (_originSize.height - _originSize.height / _resultPinchScale) / 2);
+    CGPoint reverseTranslationPoint = CGPointMake(reverseScalePoint.x - _resultPanTraslation.x, reverseScalePoint.y - _resultPanTraslation.y);
+    CGPoint reverseRotationPoint = CGPointMake(reverseTranslationPoint.x * cos(_resultRotationAngle) - reverseTranslationPoint.y * sin(_resultRotationAngle),
+                                               reverseTranslationPoint.y * cos(_resultRotationAngle) + reverseTranslationPoint.x * sin(_resultRotationAngle));
+    _rightBottomPoint = reverseRotationPoint;
+    return reverseRotationPoint;
+}
+
+#warning TODO: rotation의 기준점 잡기
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
