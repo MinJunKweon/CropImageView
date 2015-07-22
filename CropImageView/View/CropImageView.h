@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CropImageView : UIImageView
-
+@interface CropImageView : UIImageView <UIGestureRecognizerDelegate>
 
 - (instancetype)init;
 - (instancetype)initWithImage:(UIImage *)image;
