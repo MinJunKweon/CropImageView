@@ -13,6 +13,8 @@
 
 @interface CropImageViewController ()
 
+@property (nonatomic, strong) UIView *borderView;
+
 @end
 
 @implementation CropImageViewController
@@ -25,6 +27,7 @@
     if (self) {
         _imageView = [[CropImageView alloc] init];
         
+        _borderView = [[UIView alloc] init];
         _doneButton = [[UIButton alloc] init];
         _ltrbLabel = [[UILabel alloc] init];
         
@@ -41,6 +44,8 @@
     UIImage *image = [UIImage imageNamed:@"image.png"];
     _imageView.image = image;
     
+    _borderView.backgroundColor = [UIColor whiteColor];
+    
     _doneButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     _doneButton.backgroundColor = [UIColor whiteColor];
     _doneButton.titleLabel.font = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:30.0f];
@@ -56,6 +61,7 @@
     _ltrbLabel.textAlignment = NSTextAlignmentCenter;
     
     [self.view addSubview:_imageView];
+    [self.view addSubview:_borderView];
     [self.view addSubview:_doneButton];
     [self.view addSubview:_ltrbLabel];
 }
@@ -63,8 +69,14 @@
 - (void)makeAutoLayoutConstraints
 {
     [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.right.and.top.equalTo(self.view);
-        make.bottom.equalTo(self.view.mas_centerY).with.offset(20.0f);
+        make.top.and.left.and.right.equalTo(self.view);
+        make.bottom.equalTo(self.view.mas_centerY).with.offset(30.0f);
+    }];
+    
+    [_borderView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_imageView.mas_bottom);
+        make.height.equalTo(@1.0f);
+        make.left.and.right.equalTo(self.view);
     }];
     
     [_doneButton mas_makeConstraints:^(MASConstraintMaker *make) {

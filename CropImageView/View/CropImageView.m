@@ -10,6 +10,8 @@
 
 @interface CropImageView ()
 
+@property (nonatomic) CGRect origin;
+
 @property (nonatomic) CGFloat previousRotationAngle;
 @property (nonatomic) CGFloat previousPinchScale;
 @property (nonatomic) CGPoint previousPanTranslation;
@@ -34,7 +36,6 @@
         _previousPanTranslation = CGPointMake(0, 0);
         
         self.contentMode = UIViewContentModeScaleAspectFill;
-        self.clipsToBounds = YES;
         self.multipleTouchEnabled = YES;
         self.userInteractionEnabled = YES;
         
@@ -49,6 +50,12 @@
         [self addGestureRecognizer:panGestureRecognizer];
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    _origin = self.frame;
 }
 
 #pragma mark - Gesture Recognizer
