@@ -8,16 +8,11 @@
 
 #import "CropImageView.h"
 
-typedef NS_ENUM(NSInteger, kViewType) {
-    kViewTypeImage,
-    kViewTypeCropView
-};
-
 typedef NS_ENUM(NSInteger, kEdgePointType){
-    kEdgePointTypeLeftTop,
+    kEdgePointTypeLeftTop = 0,
     kEdgePointTypeLeftBottom,
-    kEdgePointTypeRightTop,
-    kEdgePointTypeRightBottom
+    kEdgePointTypeRightBottom,
+    kEdgePointTypeRightTop
 };
 
 @interface CropImageView ()
@@ -27,6 +22,8 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 @property (nonatomic) CGFloat previousRotationAngle;
 @property (nonatomic) CGFloat previousPinchScale;
 @property (nonatomic) CGPoint previousPanTranslation;
+
+@property (nonatomic) NSMutableArray *imageEdgePoint;
 
 @end
 
@@ -155,25 +152,26 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
     offset = CGPointMake(reverseTransform.tx, reverseTransform.ty);
 
     CGPoint ltPoint = [self edgePointWithType:kEdgePointTypeLeftTop
-                                     viewType:kViewTypeCropView
-                                        scale:scale angle:angle offset:offset];
+                                 scale:scale angle:angle offset:offset];
     CGPoint lbPoint = [self edgePointWithType:kEdgePointTypeLeftBottom
-                                     viewType:kViewTypeCropView
-                                        scale:scale angle:angle offset:offset];
+                                 scale:scale angle:angle offset:offset];
     CGPoint rtPoint = [self edgePointWithType:kEdgePointTypeRightTop
-                                     viewType:kViewTypeCropView
-                                        scale:scale angle:angle offset:offset];
+                                 scale:scale angle:angle offset:offset];
     CGPoint rbPoint = [self edgePointWithType:kEdgePointTypeRightBottom
-                                     viewType:kViewTypeCropView
-                                        scale:scale angle:angle offset:offset];
+                                 scale:scale angle:angle offset:offset];
     
-    CGFloat scaleWidth = _originSize.width * scale;
-    CGFloat scaleHeight = _originSize.height * scale;
+//    NSLog(@"\nrect: %@\nlt: %@\t\trt: %@\nlb: %@\t\trb: %@", NSStringFromCGRect(self.frame),
+//          NSStringFromCGPoint([self edgePointWithType:kEdgePointTypeLeftTop scale:scale angle:angle offset:offset]),
+//          NSStringFromCGPoint([self edgePointWithType:kEdgePointTypeRightTop scale:scale angle:angle offset:offset]),
+//          NSStringFromCGPoint([self edgePointWithType:kEdgePointTypeLeftBottom scale:scale angle:angle offset:offset]),
+//          NSStringFromCGPoint([self edgePointWithType:kEdgePointTypeRightBottom scale:scale angle:angle offset:offset]));
     
-    if (0.0f <= ltPoint.x && scaleWidth >= ltPoint.x && 0.0f <= ltPoint.y && scaleHeight >= ltPoint.y) {
-        if (0.0f <= lbPoint.x && scaleWidth >= lbPoint.x && 0.0f <= lbPoint.y && scaleHeight >= lbPoint.y) {
-            if (0.0f <= rtPoint.x && scaleWidth >= rtPoint.x && 0.0f <= rtPoint.y && scaleHeight >= rtPoint.y) {
-                if (0.0f <= rbPoint.x && scaleWidth >= rbPoint.x && 0.0f <= rbPoint.y && scaleHeight >= rbPoint.y) {
+    _imageEdgePoint = [self imageEdgePointsWithScale:scale];
+    
+    if ([self isInImage:ltPoint]) {
+        if ([self isInImage:lbPoint]) {
+            if ([self isInImage:rtPoint]) {
+                if ([self isInImage:rbPoint]) {
                     return NO;
                 }
             }
@@ -183,7 +181,39 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
     return YES;
 }
 
-- (CGPoint)edgePointWithType:(kEdgePointType)type viewType:(kViewType)viewType scale:(CGFloat)scale angle:(CGFloat)angle offset:(CGPoint)offset
+- (BOOL)isInImage:(CGPoint)point    // point in polygon algorithm
+{
+    BOOL isInside = false;
+    CGPoint firstPoint = [_imageEdgePoint[0] CGPointValue];
+    
+    CGFloat minX = firstPoint.x, maxX = firstPoint.x;
+    CGFloat minY = firstPoint.y, maxY = firstPoint.y;
+    
+    for (NSInteger i = 1; i < _imageEdgePoint.count; i++) {
+        CGPoint indexPoint = [_imageEdgePoint[i] CGPointValue];
+        minX = MIN(indexPoint.x, minX);
+        maxX = MAX(indexPoint.x, maxX);
+        minY = MIN(indexPoint.y, minY);
+        maxY = MAX(indexPoint.y, maxY);
+    }
+    
+    if (point.x < minX || point.x > maxX || point.y < minY || point.y > maxY) {
+        return false;
+    }
+    
+    for (NSInteger i = 0, j = _imageEdgePoint.count - 1; i < _imageEdgePoint.count; j = i++) {
+        CGPoint indexPoint = [_imageEdgePoint[i] CGPointValue];
+        CGPoint subIndexPoint = [_imageEdgePoint[j] CGPointValue];
+        if ((indexPoint.y > point.y) != (subIndexPoint.y > point.y) &&
+            point.x < (subIndexPoint.x - indexPoint.x) * (point.y - indexPoint.y) / (subIndexPoint.y - indexPoint.y) + indexPoint.x) {
+            isInside = !isInside;
+        }
+    }
+    
+    return isInside;
+}
+
+- (CGPoint)edgePointWithType:(kEdgePointType)type scale:(CGFloat)scale angle:(CGFloat)angle offset:(CGPoint)offset
 {
     
     CGFloat width = _originSize.width;
@@ -191,11 +221,7 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
     
     CGFloat radius = sqrt(pow(width/2.0f, 2) + pow(height/2.0f, 2));
     CGFloat beta = atan(height/width);
-    
-    if (viewType == kViewTypeImage) {
-        radius = radius * scale;
-    }
-    
+
     switch (type) {
         case kEdgePointTypeLeftTop:
             return CGPointMake((width * scale / 2.0f) - (radius * cos(beta - angle)) + offset.x,
@@ -215,6 +241,19 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
         default:
             return CGPointZero;
     }
+    
+    return CGPointZero;
+}
+
+- (NSMutableArray *)imageEdgePointsWithScale:(CGFloat)scale
+{
+    NSMutableArray *edgePointArray =[[NSMutableArray alloc] init];
+    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(0, 0)]];
+    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(_originSize.width*scale, 0)]];
+    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(_originSize.width*scale, _originSize.height*scale)]];
+    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(0, _originSize.height*scale)]];
+    
+    return edgePointArray;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer

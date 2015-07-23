@@ -113,8 +113,8 @@
 - (void)done
 {
     [UIView animateWithDuration:.35f animations:^{
-//        _imageView.transform = CGAffineTransformScale(_imageView.transform, 2.0f, 2.0f);
-        _imageView.transform = CGAffineTransformRotate(_imageView.transform, M_PI_4);
+        _imageView.transform = CGAffineTransformScale(_imageView.transform, 2.0f, 2.0f);
+//        _imageView.transform = CGAffineTransformRotate(_imageView.transform, M_PI_4);
     } completion:^(BOOL finished) {
         [_imageView isInvaildPosition];
     }];
