@@ -20,4 +20,6 @@
 - (instancetype)init;
 - (instancetype)initWithImage:(UIImage *)image;
 
+- (BOOL)isInvaildPosition;
+
 @end

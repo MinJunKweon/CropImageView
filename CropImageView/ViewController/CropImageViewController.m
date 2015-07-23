@@ -113,10 +113,10 @@
 - (void)done
 {
     [UIView animateWithDuration:.35f animations:^{
+//        _imageView.transform = CGAffineTransformScale(_imageView.transform, 2.0f, 2.0f);
         _imageView.transform = CGAffineTransformRotate(_imageView.transform, M_PI_4);
     } completion:^(BOOL finished) {
-        NSLog(@"transform : %@", NSStringFromCGAffineTransform(_imageView.transform));
-        NSLog(@"rect : %@", NSStringFromCGRect(_imageView.frame));
+        [_imageView isInvaildPosition];
     }];
 //    _ltrbLabel.text = [NSString stringWithFormat:@"%@, %lf", NSStringFromCGPoint(_imageScrollView.contentOffset), _imageScrollView.zoomScale];
 }
