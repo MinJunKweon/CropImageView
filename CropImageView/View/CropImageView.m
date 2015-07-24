@@ -20,8 +20,8 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 @property (nonatomic) CGFloat xMargin;
 @property (nonatomic) CGFloat yMargin;
 
-@property (nonatomic) CGPoint contentLeftTop;
 @property (nonatomic) CGSize originSize;
+@property (nonatomic) CGSize originBoundSize;
 
 @property (nonatomic) CGFloat imageRotationAngle;
 @property (nonatomic) CGFloat imageScale;
@@ -83,6 +83,7 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
     _xMargin = fabs(imageRect.origin.x);
     _yMargin = fabs(imageRect.origin.y);
     _originSize = imageRect.size;
+    _originBoundSize = self.bounds.size;
 }
 
 - (void)saveTransform
@@ -107,11 +108,13 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 - (void)handlePinch:(UIPinchGestureRecognizer *)pinchGestureRecognizer
 {
     if (pinchGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        if ((_imageScale <= _maximumScale) || (_maximumScale == 0.0f)) {
+        if ((_imageScale < _maximumScale) || (_maximumScale == 0.0f) || pinchGestureRecognizer.scale < 1.0f) {
             self.transform = CGAffineTransformScale(self.transform, pinchGestureRecognizer.scale, pinchGestureRecognizer.scale);
             _imageScale += pinchGestureRecognizer.scale - 1.0f;
             pinchGestureRecognizer.scale = 1.0f;
             [self saveTransform];
+        } else {
+            _imageScale = _maximumScale;
         }
     } else if (pinchGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         if ([self isInvaildPosition]) {
@@ -274,8 +277,8 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 - (CGPoint)edgePointWithType:(kEdgePointType)type scale:(CGFloat)scale angle:(CGFloat)angle offset:(CGPoint)offset
 {
     
-    CGFloat width = _originSize.width;
-    CGFloat height = _originSize.height;
+    CGFloat width = _originBoundSize.width;
+    CGFloat height = _originBoundSize.height;
     
     CGFloat radius = sqrt(pow(width/2.0f, 2) + pow(height/2.0f, 2));
     CGFloat beta = atan(height/width);
