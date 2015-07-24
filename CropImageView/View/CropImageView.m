@@ -160,6 +160,8 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
     CGPoint rbPoint = [self edgePointWithType:kEdgePointTypeRightBottom
                                  scale:scale angle:angle offset:offset];
     
+    NSLog(@"imagePosition: %@", NSStringFromCGRect([self imagePosition]));
+    
 //    NSLog(@"\nrect: %@\nlt: %@\t\trt: %@\nlb: %@\t\trb: %@", NSStringFromCGRect(self.frame),
 //          NSStringFromCGPoint([self edgePointWithType:kEdgePointTypeLeftTop scale:scale angle:angle offset:offset]),
 //          NSStringFromCGPoint([self edgePointWithType:kEdgePointTypeRightTop scale:scale angle:angle offset:offset]),
@@ -259,6 +261,91 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return YES;
+}
+
+- (CGRect)imagePosition
+{
+    float x = 0.0f;
+    float y = 0.0f;
+    float w = 0.0f;
+    float h = 0.0f;
+    CGFloat ratio = 0.0f;
+    CGFloat horizontalRatio = self.frame.size.width / self.image.size.width;
+    CGFloat verticalRatio = self.frame.size.height / self.image.size.height;
+    
+    switch (self.contentMode) {
+        case UIViewContentModeScaleToFill:
+            w = self.frame.size.width;
+            h = self.frame.size.height;
+            break;
+        case UIViewContentModeScaleAspectFit:
+            // contents scaled to fit with fixed aspect. remainder is transparent
+            ratio = MIN(horizontalRatio, verticalRatio);
+            w = self.image.size.width*ratio;
+            h = self.image.size.height*ratio;
+            x = (horizontalRatio == ratio ? 0 : ((self.frame.size.width - w)/2));
+            y = (verticalRatio == ratio ? 0 : ((self.frame.size.height - h)/2));
+            break;
+        case UIViewContentModeScaleAspectFill:
+            // contents scaled to fill with fixed aspect. some portion of content may be clipped.
+            ratio = MAX(horizontalRatio, verticalRatio);
+            w = self.image.size.width*ratio;
+            h = self.image.size.height*ratio;
+            x = (horizontalRatio == ratio ? 0 : ((self.frame.size.width - w)/2));
+            y = (verticalRatio == ratio ? 0 : ((self.frame.size.height - h)/2));
+            break;
+        case UIViewContentModeCenter:
+            // contents remain same size. positioned adjusted.
+            w = self.image.size.width;
+            h = self.image.size.height;
+            x = (self.frame.size.width - w)/2;
+            y = (self.frame.size.height - h)/2;
+            break;
+        case UIViewContentModeTop:
+            w = self.image.size.width;
+            h = self.image.size.height;
+            x = (self.frame.size.width - w)/2;
+            break;
+        case UIViewContentModeBottom:
+            w = self.image.size.width;
+            h = self.image.size.height;
+            y = (self.frame.size.height - h);
+            x = (self.frame.size.width - w)/2;
+            break;
+        case UIViewContentModeLeft:
+            w = self.image.size.width;
+            h = self.image.size.height;
+            y = (self.frame.size.height - h)/2;
+            break;
+        case UIViewContentModeRight:
+            w = self.image.size.width;
+            h = self.image.size.height;
+            y = (self.frame.size.height - h)/2;
+            x = (self.frame.size.width - w);
+            break;
+        case UIViewContentModeTopLeft:
+            w = self.image.size.width;
+            h = self.image.size.height;
+            break;
+        case UIViewContentModeTopRight:
+            w = self.image.size.width;
+            h = self.image.size.height;
+            x = (self.frame.size.width - w);
+            break;
+        case UIViewContentModeBottomLeft:
+            w = self.image.size.width;
+            h = self.image.size.height;
+            y = (self.frame.size.height - h);
+            break;
+        case UIViewContentModeBottomRight:
+            w = self.image.size.width;
+            h = self.image.size.height;
+            y = (self.frame.size.height - h);
+            x = (self.frame.size.width - w);
+        default:
+            break;
+    }
+    return CGRectMake(x, y, w, h);
 }
 
 @end
