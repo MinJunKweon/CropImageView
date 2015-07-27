@@ -81,7 +81,7 @@ typedef struct {
     _rotationGestureRecognizer.cancelsTouchesInView = NO;
     _rotationGestureRecognizer.delegate = self;
     [self addGestureRecognizer:_rotationGestureRecognizer];
-
+    
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     _tapGestureRecognizer.numberOfTapsRequired = 2;
     _tapGestureRecognizer.delegate = self;
@@ -110,12 +110,12 @@ typedef struct {
     _initialImageFrame = CGRectMake(CGRectGetMidX(_cropRect) - width / 2,
                                     CGRectGetMidY(_cropRect) - height / 2,
                                     width, height);
-    _validTransform = CGAffineTransformMakeScale(_scale, _scale);
+    self.validTransform = CGAffineTransformMakeScale(_scale, _scale);
     
     void (^doReset)(void) = ^{
         _imageView.transform = CGAffineTransformIdentity;
         _imageView.frame = _initialImageFrame;
-        _imageView.transform = _validTransform;
+        _imageView.transform = self.validTransform;
     };
     if(animated) {
         self.userInteractionEnabled = NO;
@@ -127,16 +127,13 @@ typedef struct {
     }
 }
 
-- (NSArray *)crop
+- (void)crop
 {
-    Rectangle r2 = [self applyTransform:_imageView.transform toRect:self.initialImageFrame];
-    
-    CGAffineTransform t = CGAffineTransformMakeTranslation(CGRectGetMidX(self.cropRect), CGRectGetMidY(self.cropRect));
-    t = CGAffineTransformRotate(t, -[self rotationAngleWithTransform:_imageView.transform]);
-    t = CGAffineTransformTranslate(t, -CGRectGetMidX(self.cropRect), -CGRectGetMidY(self.cropRect));
-    
-    Rectangle r3 = [self applyTransform:t toRectangle:r2];
-    return @[];
+    if ([_delegate respondsToSelector:@selector(imageEditorViewDidCropped:translate:scale:angle:)]) {
+        [_delegate imageEditorViewDidCropped:self translate:[self translateWithTransform:self.validTransform]
+                                                      scale:[self scaleWithTransform:self.validTransform]
+                                                      angle:[self rotationAngleWithTransform:self.validTransform]];
+    }
 }
 
 #pragma mark - Touches Handler
@@ -210,6 +207,7 @@ typedef struct {
     }
 }
 
+
 - (void)handleRotation:(UIRotationGestureRecognizer *)rotationGestureRecognizer
 {
     if ([self canHandleGesture:rotationGestureRecognizer.state]) {
@@ -243,7 +241,7 @@ typedef struct {
             self.gestureCount++;
             break;
         case UIGestureRecognizerStateCancelled:
-        case UIGestureRecognizerStateEnded: {
+        case UIGestureRecognizerStateEnded:
             self.gestureCount--;
             handle = NO;
             if(self.gestureCount == 0) {
@@ -263,7 +261,6 @@ typedef struct {
                         self.userInteractionEnabled = YES;
                         self.scale = scale;
                     }];
-                    
                 } else {
                     self.userInteractionEnabled = NO;
                     [self checkBoundsWithTransform:self.imageView.transform];
@@ -271,10 +268,11 @@ typedef struct {
                         self.imageView.transform = self.validTransform;
                     } completion:^(BOOL finished) {
                         self.userInteractionEnabled = YES;
+                        self.scale = scale;
                     }];
                 }
             }
-        } break;
+            break;
         default:
             break;
     }
@@ -284,9 +282,9 @@ typedef struct {
 - (CGFloat)boundedScale:(CGFloat)scale;
 {
     CGFloat boundedScale = scale;
-    if(_minimumScale > 0 && scale < _minimumScale) {
-        boundedScale = _minimumScale;
-    } else if(_maximumScale > 0 && scale > _maximumScale) {
+    if(scale < 1.0f) {
+        boundedScale = 1.0f;
+    } else if(_maximumScale > 1 && scale > _maximumScale) {
         boundedScale = _maximumScale;
     }
     return boundedScale;
@@ -345,14 +343,6 @@ typedef struct {
 {
     _image = image;
     _imageView.image = image;
-    [self reset:NO];
-}
-
-- (void)setFrame:(CGRect)frame
-{
-    [super setFrame:frame];
-    _cropRect = CGRectMake(0, 0, frame.size.width, frame.size.height);
-    _imageView.frame = frame;
 }
 
 - (void)setCropSize:(CGSize)cropSize
@@ -379,12 +369,34 @@ typedef struct {
     return _cropRect;
 }
 
+- (void)drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
+    _cropRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    _imageView.frame = self.frame;
+    _initialImageFrame = self.frame;
+    [self reset:NO];
+}
+
 
 #pragma mark - Transform
 
 - (CGFloat)rotationAngleWithTransform:(CGAffineTransform)transform
 {
     return atan2(transform.b, transform.a);
+}
+
+- (CGPoint)translateWithTransform:(CGAffineTransform)transform
+{
+    return CGPointMake(transform.tx, transform.ty);
+}
+
+- (CGFloat)scaleWithTransform:(CGAffineTransform)transform
+{
+    CGFloat scaleX = sqrt(pow(transform.a, 2) + pow(transform.c, 2));
+    CGFloat scaleY = sqrt(pow(transform.b, 2) + pow(transform.d, 2));
+    
+    return MAX(scaleX, scaleY);
 }
 
 - (CGRect)boundingBoxForRect:(CGRect)rect rotatedByRadians:(CGFloat)angle

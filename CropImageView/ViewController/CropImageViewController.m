@@ -10,9 +10,13 @@
 //#import "CropImageView.h"
 #import "ImageEditorView.h"
 
+#import "DetailImageViewController.h"
+
 #import <Masonry/Masonry.h>
 
-@interface CropImageViewController ()
+@interface CropImageViewController () <ImageEditorViewDelegate>
+
+@property (nonatomic, strong) UIImage *image;
 
 @end
 
@@ -24,7 +28,7 @@
 {
     self = [super init];
     if (self) {
-        _imageEditorView = [[ImageEditorView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
+        _imageEditorView = [[ImageEditorView alloc] init];
 
         _doneButton = [[UIButton alloc] init];
         _ltrbLabel = [[UILabel alloc] init];
@@ -39,9 +43,11 @@
 
 - (void)initialize
 {
-    UIImage *image = [UIImage imageNamed:@"image.png"];
-    _imageEditorView.image = image;
+    _image = [UIImage imageNamed:@"Square.png"];
+    _imageEditorView.image = _image;
     _imageEditorView.maximumScale = 2.0f;
+//    _imageEditorView.rotateEnabled = NO;
+    _imageEditorView.delegate = self;
     
     _doneButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     _doneButton.backgroundColor = [UIColor whiteColor];
@@ -68,7 +74,7 @@
         make.top.equalTo(self.view);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
-        make.height.equalTo(@320.0f);
+        make.height.equalTo(@375.0f);
     }];
     
     [_doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -90,9 +96,10 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [_imageEditorView setNeedsLayout];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 }
@@ -101,6 +108,7 @@
 
 - (void)done
 {
+    /*
     if (_imageEditorView.frame.origin.y == 30.0f) {
         [_imageEditorView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(@0);
@@ -114,6 +122,25 @@
             make.height.equalTo(@320.0f);
         }];
     }
+    */
+    [_imageEditorView crop];
+}
+
+#pragma mark - Image Editor Delegate
+
+- (void)imageEditorViewDidCropped:(ImageEditorView *)imageEditorView translate:(CGPoint)translation scale:(CGFloat)scale angle:(CGFloat)angle
+{
+    _ltrbLabel.text = [NSString stringWithFormat:@"{%lf, %lf}\n %lf, %lf", translation.x, translation.y, scale, angle];
+    
+#warning test
+    CGPoint testPoint = CGPointMake(24.534655f, -12.077087);
+    CGFloat testScale = 1.729562;
+    CGFloat testAngle = 0.000000;
+    DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image translate:testPoint scale:testScale angle:testAngle];
+    
+//    DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image translate:translation scale:scale angle:angle];
+    
+    [self presentViewController:detailViewController animated:NO completion:nil];
 }
 
 @end
