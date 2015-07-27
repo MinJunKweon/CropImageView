@@ -7,13 +7,12 @@
 //
 
 #import "CropImageViewController.h"
-#import "CropImageView.h"
+//#import "CropImageView.h"
+#import "ImageEditorView.h"
 
 #import <Masonry/Masonry.h>
 
 @interface CropImageViewController ()
-
-@property (nonatomic, strong) UIView *borderView;
 
 @end
 
@@ -25,9 +24,8 @@
 {
     self = [super init];
     if (self) {
-        _imageView = [[CropImageView alloc] init];
-        
-        _borderView = [[UIView alloc] init];
+        _imageEditorView = [[ImageEditorView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
+
         _doneButton = [[UIButton alloc] init];
         _ltrbLabel = [[UILabel alloc] init];
         
@@ -41,11 +39,9 @@
 
 - (void)initialize
 {
-    UIImage *image = [UIImage imageNamed:@"Square.png"];
-    _imageView.image = image;
-    _imageView.maximumScale = 2.0f;
-    
-    _borderView.backgroundColor = [UIColor whiteColor];
+    UIImage *image = [UIImage imageNamed:@"image.png"];
+    _imageEditorView.image = image;
+    _imageEditorView.maximumScale = 2.0f;
     
     _doneButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     _doneButton.backgroundColor = [UIColor whiteColor];
@@ -61,25 +57,18 @@
     _ltrbLabel.numberOfLines = 0;
     _ltrbLabel.textAlignment = NSTextAlignmentCenter;
     
-    [self.view addSubview:_imageView];
-    [self.view addSubview:_borderView];
+    [self.view addSubview:_imageEditorView];
     [self.view addSubview:_doneButton];
     [self.view addSubview:_ltrbLabel];
 }
 
 - (void)makeAutoLayoutConstraints
 {
-    [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_imageEditorView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.height.equalTo(@320.0f);
-    }];
-    
-    [_borderView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_imageView.mas_bottom);
-        make.height.equalTo(@1.0f);
-        make.left.and.right.equalTo(self.view);
     }];
     
     [_doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -112,13 +101,19 @@
 
 - (void)done
 {
-    [UIView animateWithDuration:.35f animations:^{
-        _imageView.transform = CGAffineTransformScale(_imageView.transform, 2.0f, 2.0f);
-//        _imageView.transform = CGAffineTransformRotate(_imageView.transform, M_PI_4);
-    } completion:^(BOOL finished) {
-        [_imageView isInvaildPosition];
-    }];
-//    _ltrbLabel.text = [NSString stringWithFormat:@"%@, %lf", NSStringFromCGPoint(_imageScrollView.contentOffset), _imageScrollView.zoomScale];
+    if (_imageEditorView.frame.origin.y == 30.0f) {
+        [_imageEditorView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@0);
+            make.width.equalTo(@200.0f);
+            make.height.equalTo(@200.0f);
+        }];
+    } else {
+        [_imageEditorView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@30.0f);
+            make.width.equalTo(@320.0f);
+            make.height.equalTo(@320.0f);
+        }];
+    }
 }
 
 @end

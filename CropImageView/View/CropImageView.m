@@ -22,6 +22,7 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 
 @property (nonatomic) CGSize originSize;
 @property (nonatomic) CGSize originBoundSize;
+@property (nonatomic) CGFloat originScale;
 
 @property (nonatomic) CGFloat imageRotationAngle;
 @property (nonatomic) CGFloat imageScale;
@@ -54,11 +55,8 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
         _imageScale = 1.0f;
         _imageTranslation = CGPointZero;
         
-//        _previousRotationAngle = 0.0f;
-//        _previousPinchScale = 1.0f;
-//        _previousPanTranslation = CGPointMake(0, 0);
-        
         self.contentMode = UIViewContentModeScaleAspectFill;
+//        self.contentMode = UIViewContentModeCenter;
         self.multipleTouchEnabled = YES;
         self.userInteractionEnabled = YES;
         
@@ -84,6 +82,8 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
     _yMargin = fabs(imageRect.origin.y);
     _originSize = imageRect.size;
     _originBoundSize = self.bounds.size;
+    
+    _originScale = MIN(self.image.size.width/self.bounds.size.width, self.image.size.height/self.bounds.size.height);
 }
 
 - (void)saveTransform
@@ -96,18 +96,26 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 - (void)handleRotate:(UIRotationGestureRecognizer *)rotationGestureRecognizer
 {
     if (rotationGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        if ([self predictInvaildPositionWithScale:_imageScale angle:_imageRotationAngle+rotationGestureRecognizer.rotation offset:_imageTranslation]) {
+            return;
+        }
         self.transform = CGAffineTransformRotate(self.transform, rotationGestureRecognizer.rotation);
         _imageRotationAngle += rotationGestureRecognizer.rotation;
         rotationGestureRecognizer.rotation = 0.0f;
         [self saveTransform];
     } else if (rotationGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        
+        if ([self isInvaildPosition]) {
+            [self resetTransform];
+        }
     }
 }
 
 - (void)handlePinch:(UIPinchGestureRecognizer *)pinchGestureRecognizer
 {
     if (pinchGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        if ([self predictInvaildPositionWithScale:_imageScale+pinchGestureRecognizer.scale - 1.0f angle:_imageRotationAngle offset:_imageTranslation]) {
+            return;
+        }
         if ((_imageScale < _maximumScale) || (_maximumScale == 0.0f) || pinchGestureRecognizer.scale < 1.0f) {
             self.transform = CGAffineTransformScale(self.transform, pinchGestureRecognizer.scale, pinchGestureRecognizer.scale);
             _imageScale += pinchGestureRecognizer.scale - 1.0f;
@@ -127,9 +135,12 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 {
     if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint panTranslation = [panGestureRecognizer translationInView:self];
+        if ([self predictInvaildPositionWithScale:_imageScale angle:_imageRotationAngle offset:CGPointMake(_imageTranslation.x + panTranslation.x, _imageTranslation.y + panTranslation.y)]) {
+            return;
+        }
         self.transform = CGAffineTransformTranslate(self.transform, panTranslation.x, panTranslation.y);
-        _imageTranslation.x += panTranslation.x * _imageScale;
-        _imageTranslation.y += panTranslation.y * _imageScale;
+        _imageTranslation.x += panTranslation.x;
+        _imageTranslation.y += panTranslation.y;
         [panGestureRecognizer setTranslation:CGPointZero inView:self];
         [self saveTransform];
     } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
@@ -192,11 +203,15 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
     CGPoint rbPoint = [self edgePointWithType:kEdgePointTypeRightBottom
                                         scale:_imageScale angle:_imageRotationAngle offset:_imageTranslation];;
     
-    NSLog(@"angle: %lf\nrect: %@\nlt: %@\t\trt: %@\nlb: %@\t\trb: %@", _imageRotationAngle*180/M_PI, NSStringFromCGRect(self.frame),
-          NSStringFromCGPoint(ltPoint),
-          NSStringFromCGPoint(rtPoint),
-          NSStringFromCGPoint(lbPoint),
-          NSStringFromCGPoint(rbPoint));
+//    NSLog(@"angle: %lf\nrect: %@\nlt: %@\t\trt: %@\nlb: %@\t\trb: %@", _imageRotationAngle*180/M_PI, NSStringFromCGRect(self.frame),
+//          NSStringFromCGPoint(ltPoint),
+//          NSStringFromCGPoint(rtPoint),
+//          NSStringFromCGPoint(lbPoint),
+//          NSStringFromCGPoint(rbPoint));
+
+    NSLog(@"rect: %@", NSStringFromCGPoint(CGPointApplyAffineTransform(CGPointMake(10, 10), self.transform)));
+
+    NSLog(@"%ld", self.image.imageOrientation);
     
     _imageEdgePoint = [self imageEdgePointsWithScale:_imageScale];
     
@@ -244,7 +259,7 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 
 - (BOOL)isInImage:(CGPoint)point    // point in polygon algorithm
 {
-    BOOL isInside = false;
+    BOOL isInside = NO;
     CGPoint firstPoint = [_imageEdgePoint[0] CGPointValue];
     
     CGFloat minX = firstPoint.x, maxX = firstPoint.x;
@@ -259,7 +274,7 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
     }
     
     if (point.x < minX || point.x > maxX || point.y < minY || point.y > maxY) {
-        return false;
+        return NO;
     }
     
     for (NSInteger i = 0, j = _imageEdgePoint.count - 1; i < _imageEdgePoint.count; j = i++) {
@@ -285,20 +300,20 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 
     switch (type) {
         case kEdgePointTypeLeftTop:
-            return CGPointMake((width * scale / 2.0f) - (radius * cos(beta - angle)) + _xMargin - offset.x,
-                               (height * scale / 2.0f) - (radius * sin(beta - angle)) + _yMargin - offset.y);
+            return CGPointMake((width * scale / 2.0f) - (radius * cos(beta - angle)) + (_xMargin - offset.x) * _imageScale,
+                               (height * scale / 2.0f) - (radius * sin(beta - angle)) + (_yMargin - offset.y) * _imageScale);
             
         case kEdgePointTypeLeftBottom:
-            return CGPointMake((width * scale / 2.0f) - (radius * sin(beta - angle)) + _xMargin - offset.x,
-                               (height * scale / 2.0f) + (radius * cos(beta - angle)) + _yMargin - offset.y);
+            return CGPointMake((width * scale / 2.0f) - (radius * sin(beta - angle)) + (_xMargin - offset.x) * _imageScale,
+                               (height * scale / 2.0f) + (radius * cos(beta - angle)) + (_yMargin - offset.y) * _imageScale);
             
         case kEdgePointTypeRightTop:
-            return CGPointMake((width * scale / 2.0f) + (radius * sin(beta - angle)) + _xMargin - offset.x,
-                               (height * scale / 2.0f) - (radius * cos(beta - angle)) + _yMargin - offset.y);
+            return CGPointMake((width * scale / 2.0f) + (radius * sin(beta - angle)) + (_xMargin - offset.x) * _imageScale,
+                               (height * scale / 2.0f) - (radius * cos(beta - angle)) + (_yMargin - offset.y) * _imageScale);
             
         case kEdgePointTypeRightBottom:
-            return CGPointMake((width * scale / 2.0f) + (radius * cos(beta - angle)) + _xMargin - offset.x,
-                               (height * scale / 2.0f) + (radius * sin(beta - angle)) + _yMargin - offset.y);
+            return CGPointMake((width * scale / 2.0f) + (radius * cos(beta - angle)) + (_xMargin - offset.x) * _imageScale,
+                               (height * scale / 2.0f) + (radius * sin(beta - angle)) + (_yMargin - offset.y) * _imageScale);
         default:
             return CGPointZero;
     }
@@ -309,11 +324,11 @@ typedef NS_ENUM(NSInteger, kEdgePointType){
 - (NSMutableArray *)imageEdgePointsWithScale:(CGFloat)scale
 {
     NSMutableArray *edgePointArray =[[NSMutableArray alloc] init];
-    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(0, 0)]];
-    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(_originSize.width*scale, 0)]];
-    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(_originSize.width*scale, _originSize.height*scale)]];
-    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(0, _originSize.height*scale)]];
-    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(0, 0)]];
+    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(-1.0f, -1.0f)]];
+    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(_originSize.width*scale+1.0f, -1.0f)]];
+    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(_originSize.width*scale+1.0f, _originSize.height*scale+1.0f)]];
+    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(-1.0f, _originSize.height*scale+1.0f)]];
+    [edgePointArray addObject:[NSValue valueWithCGPoint:CGPointMake(-1.0f, -1.0f)]];
     
     return edgePointArray;
 }

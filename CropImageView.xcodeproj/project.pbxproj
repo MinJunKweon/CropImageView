@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C1A4815F1B65C8EE003B2AE9 /* ImageEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A4815E1B65C8EE003B2AE9 /* ImageEditorView.m */; };
 		C1F28ACB1B5E22B4008C8940 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F28ACA1B5E22B4008C8940 /* main.m */; };
 		C1F28ACE1B5E22B4008C8940 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F28ACD1B5E22B4008C8940 /* AppDelegate.m */; };
 		C1F28AD61B5E22B4008C8940 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1F28AD51B5E22B4008C8940 /* Images.xcassets */; };
@@ -20,6 +21,8 @@
 
 /* Begin PBXFileReference section */
 		154B022EB33F9E73DA2B28E8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		C1A4815D1B65C8EE003B2AE9 /* ImageEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageEditorView.h; sourceTree = "<group>"; };
+		C1A4815E1B65C8EE003B2AE9 /* ImageEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageEditorView.m; sourceTree = "<group>"; };
 		C1F28AC51B5E22B4008C8940 /* CropImageView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CropImageView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1F28AC91B5E22B4008C8940 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1F28ACA1B5E22B4008C8940 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -123,6 +126,8 @@
 			children = (
 				C1F28B031B5F318E008C8940 /* CropImageView.h */,
 				C1F28B041B5F318E008C8940 /* CropImageView.m */,
+				C1A4815D1B65C8EE003B2AE9 /* ImageEditorView.h */,
+				C1A4815E1B65C8EE003B2AE9 /* ImageEditorView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -236,6 +241,7 @@
 				C1F28B051B5F318E008C8940 /* CropImageView.m in Sources */,
 				C1F28AFF1B5E3389008C8940 /* CropImageViewController.m in Sources */,
 				C1F28ACE1B5E22B4008C8940 /* AppDelegate.m in Sources */,
+				C1A4815F1B65C8EE003B2AE9 /* ImageEditorView.m in Sources */,
 				C1F28ACB1B5E22B4008C8940 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
