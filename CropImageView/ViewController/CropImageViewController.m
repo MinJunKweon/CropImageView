@@ -17,6 +17,7 @@
 @interface CropImageViewController () <ImageEditorViewDelegate>
 
 @property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) UIView *containerView;
 
 @end
 
@@ -29,7 +30,8 @@
     self = [super init];
     if (self) {
         _imageEditorView = [[ImageEditorView alloc] init];
-
+        _containerView = [[UIView alloc] init];
+        
         _doneButton = [[UIButton alloc] init];
         _ltrbLabel = [[UILabel alloc] init];
         
@@ -43,11 +45,15 @@
 
 - (void)initialize
 {
-    _image = [UIImage imageNamed:@"Square.png"];
+    _image = [UIImage imageNamed:@"image.png"];
     _imageEditorView.image = _image;
     _imageEditorView.maximumScale = 2.0f;
-//    _imageEditorView.rotateEnabled = NO;
     _imageEditorView.delegate = self;
+    
+    _containerView.backgroundColor = [UIColor clearColor];
+    _containerView.layer.masksToBounds = YES;
+    _containerView.clipsToBounds = YES;
+    [_containerView addSubview:_imageEditorView];
     
     _doneButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     _doneButton.backgroundColor = [UIColor whiteColor];
@@ -63,7 +69,8 @@
     _ltrbLabel.numberOfLines = 0;
     _ltrbLabel.textAlignment = NSTextAlignmentCenter;
     
-    [self.view addSubview:_imageEditorView];
+//    [self.view addSubview:_imageEditorView];
+    [self.view addSubview:_containerView];
     [self.view addSubview:_doneButton];
     [self.view addSubview:_ltrbLabel];
 }
@@ -71,10 +78,14 @@
 - (void)makeAutoLayoutConstraints
 {
     [_imageEditorView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(_containerView);
+    }];
+    
+    [_containerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
-        make.height.equalTo(@375.0f);
+        make.height.equalTo(@320.0f);
     }];
     
     [_doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -111,16 +122,14 @@
     /*
     if (_imageEditorView.frame.origin.y == 30.0f) {
         [_imageEditorView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(@0);
-            make.width.equalTo(@200.0f);
-            make.height.equalTo(@200.0f);
-        }];
-    } else {
-        [_imageEditorView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(@30.0f);
-            make.width.equalTo(@320.0f);
+            make.top.equalTo(self.view);
+            make.left.equalTo(self.view);
+            make.right.equalTo(self.view);
             make.height.equalTo(@320.0f);
         }];
+    } else {
+        _imageEditorView.frame = CGRectMake(0, 30, 200, 200);
+        [_imageEditorView setNeedsDisplay];
     }
     */
     [_imageEditorView crop];
@@ -128,19 +137,26 @@
 
 #pragma mark - Image Editor Delegate
 
+- (void)imageEditorViewDidCropped:(ImageEditorView *)imageEditorView rect:(CGRect)rect
+{
+    _ltrbLabel.text = [NSString stringWithFormat:@"%@", NSStringFromCGRect(rect)];
+    
+    DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image rect:rect];
+    [self presentViewController:detailViewController animated:NO completion:nil];
+}
+
+/*
 - (void)imageEditorViewDidCropped:(ImageEditorView *)imageEditorView translate:(CGPoint)translation scale:(CGFloat)scale angle:(CGFloat)angle
 {
     _ltrbLabel.text = [NSString stringWithFormat:@"{%lf, %lf}\n %lf, %lf", translation.x, translation.y, scale, angle];
     
-#warning test
-    CGPoint testPoint = CGPointMake(24.534655f, -12.077087);
-    CGFloat testScale = 1.729562;
-    CGFloat testAngle = 0.000000;
-    DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image translate:testPoint scale:testScale angle:testAngle];
+//    DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image translate:testPoint scale:testScale angle:testAngle];
     
-//    DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image translate:translation scale:scale angle:angle];
+    
+    DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image translate:translation scale:scale angle:angle];
     
     [self presentViewController:detailViewController animated:NO completion:nil];
 }
+*/
 
 @end

@@ -16,6 +16,9 @@
 @property (nonatomic) CGFloat scale;
 @property (nonatomic) CGPoint translation;
 
-- (instancetype)initWithImage:(UIImage *)image translate:(CGPoint)translation scale:(CGFloat)scale angle:(CGFloat)angle;
+@property (nonatomic) CGRect rect;
+
+//- (instancetype)initWithImage:(UIImage *)image translate:(CGPoint)translation scale:(CGFloat)scale angle:(CGFloat)angle;
+- (instancetype)initWithImage:(UIImage *)image rect:(CGRect)rect;
 
 @end

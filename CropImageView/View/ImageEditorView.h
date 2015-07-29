@@ -12,7 +12,8 @@
 
 @protocol ImageEditorViewDelegate <NSObject>
 
-- (void)imageEditorViewDidCropped:(ImageEditorView *)imageEditorView translate:(CGPoint)leftTopPoint scale:(CGFloat)scale angle:(CGFloat)angle;
+//- (void)imageEditorViewDidCropped:(ImageEditorView *)imageEditorView translate:(CGPoint)leftTopPoint scale:(CGFloat)scale angle:(CGFloat)angle;
+- (void)imageEditorViewDidCropped:(ImageEditorView *)imageEditorView rect:(CGRect)rect;
 
 @end
 

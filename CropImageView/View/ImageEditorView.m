@@ -62,11 +62,6 @@ typedef struct {
     _gestureCount = 0;
     _scale = 1.0f;
     
-    self.panEnabled = YES;
-    self.rotateEnabled = YES;
-    self.scaleEnabled = YES;
-    self.tapToResetEnabled = YES;
-    
     _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanning:)];
     _panGestureRecognizer.cancelsTouchesInView = NO;
     _panGestureRecognizer.delegate = self;
@@ -86,6 +81,11 @@ typedef struct {
     _tapGestureRecognizer.numberOfTapsRequired = 2;
     _tapGestureRecognizer.delegate = self;
     [self addGestureRecognizer:_tapGestureRecognizer];
+    
+    self.panEnabled = YES;
+    self.rotateEnabled = NO;       // 이번 VOLO앱에 적용하는 것에선 rotate는 Disabled
+    self.scaleEnabled = YES;
+    self.tapToResetEnabled = YES;
 }
 
 #pragma mark - Global Animated
@@ -129,10 +129,29 @@ typedef struct {
 
 - (void)crop
 {
+    /*
     if ([_delegate respondsToSelector:@selector(imageEditorViewDidCropped:translate:scale:angle:)]) {
         [_delegate imageEditorViewDidCropped:self translate:[self translateWithTransform:self.validTransform]
                                                       scale:[self scaleWithTransform:self.validTransform]
                                                       angle:[self rotationAngleWithTransform:self.validTransform]];
+    }
+    */
+
+    CGFloat scale  = [self scaleWithTransform:self.validTransform];
+    
+    CGFloat widthScale = _image.size.width / self.cropRect.size.width;
+    CGFloat heightScale = _image.size.height / self.cropRect.size.height;
+    CGFloat contentScale = MIN(widthScale, heightScale);
+    
+    Rectangle rect = [self applyTransform:self.validTransform toRect:self.initialImageFrame];
+    
+    CGRect croppedRect = CGRectMake(fabs(rect.tl.x) * contentScale,
+                                    fabs(rect.tl.y) * contentScale,
+                                    self.cropRect.size.width * widthScale / scale,
+                                    self.cropRect.size.height * heightScale / scale);
+    
+    if ([_delegate respondsToSelector:@selector(imageEditorViewDidCropped:rect:)]) {
+        [_delegate imageEditorViewDidCropped:self rect:croppedRect];
     }
 }
 
