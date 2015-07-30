@@ -45,7 +45,7 @@
 
 - (void)initialize
 {
-    _image = [UIImage imageNamed:@"image.png"];
+    _image = [UIImage imageNamed:@"landscape.jpg"];
     _imageEditorView.image = _image;
     _imageEditorView.maximumScale = 2.0f;
     _imageEditorView.delegate = self;
@@ -82,7 +82,7 @@
     }];
     
     [_containerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view);
+        make.top.equalTo(self.view).with.offset(30.0f);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.height.equalTo(@320.0f);
@@ -140,7 +140,7 @@
 - (void)imageEditorViewDidCropped:(ImageEditorView *)imageEditorView rect:(CGRect)rect
 {
     _ltrbLabel.text = [NSString stringWithFormat:@"%@", NSStringFromCGRect(rect)];
-    
+
     DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image rect:rect];
     [self presentViewController:detailViewController animated:NO completion:nil];
 }

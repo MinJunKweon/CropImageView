@@ -145,10 +145,10 @@ typedef struct {
     
     Rectangle rect = [self applyTransform:self.validTransform toRect:self.initialImageFrame];
     
-    CGRect croppedRect = CGRectMake(fabs(rect.tl.x) * contentScale,
-                                    fabs(rect.tl.y) * contentScale,
-                                    self.cropRect.size.width * widthScale / scale,
-                                    self.cropRect.size.height * heightScale / scale);
+    CGRect croppedRect = CGRectMake(fabs(rect.tl.x) * contentScale / scale,
+                                    fabs(rect.tl.y) * contentScale / scale,
+                                    self.cropRect.size.width * contentScale / scale,
+                                    self.cropRect.size.height * contentScale / scale);
     
     if ([_delegate respondsToSelector:@selector(imageEditorViewDidCropped:rect:)]) {
         [_delegate imageEditorViewDidCropped:self rect:croppedRect];

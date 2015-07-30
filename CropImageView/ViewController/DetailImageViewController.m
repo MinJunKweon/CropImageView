@@ -98,7 +98,8 @@
 - (void)makeAutoLayoutConstraints
 {
     [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.right.and.left.equalTo(self.view);
+        make.top.equalTo(self.view).with.offset(30.0f);
+        make.right.and.left.equalTo(self.view);
         make.height.equalTo(@320.0f);
     }];
     
@@ -146,9 +147,8 @@
 
 - (void)setCroppedImageWithRect:(CGRect)rect imageView:(UIImageView *)imageView
 {
-    CGFloat minimumSize = MIN(rect.size.width, rect.size.height);
-
-    CGImageRef imageRef = CGImageCreateWithImageInRect(imageView.image.CGImage, CGRectMake(rect.origin.x, rect.origin.y, minimumSize, minimumSize));
+    NSLog(@"rect: %@", NSStringFromCGRect(rect));
+    CGImageRef imageRef = CGImageCreateWithImageInRect(imageView.image.CGImage, rect);
     [imageView setImage:[UIImage imageWithCGImage:imageRef]];
     CGImageRelease(imageRef);
 }

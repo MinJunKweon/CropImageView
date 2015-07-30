@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C13FFD561B69E9AD00DF756D /* default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C13FFD511B69E9AD00DF756D /* default.jpg */; };
+		C13FFD571B69E9AD00DF756D /* landscape.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C13FFD521B69E9AD00DF756D /* landscape.jpg */; };
+		C13FFD581B69E9AD00DF756D /* panorama.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C13FFD531B69E9AD00DF756D /* panorama.jpg */; };
+		C13FFD591B69E9AD00DF756D /* portrait.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C13FFD541B69E9AD00DF756D /* portrait.jpg */; };
+		C13FFD5C1B69EF3900DF756D /* square.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C13FFD5B1B69EF3900DF756D /* square.jpg */; };
 		C1A4815F1B65C8EE003B2AE9 /* ImageEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A4815E1B65C8EE003B2AE9 /* ImageEditorView.m */; };
 		C1A481621B66214D003B2AE9 /* DetailImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A481611B66214D003B2AE9 /* DetailImageViewController.m */; };
 		C1F28ACB1B5E22B4008C8940 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F28ACA1B5E22B4008C8940 /* main.m */; };
@@ -14,14 +19,17 @@
 		C1F28AD61B5E22B4008C8940 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1F28AD51B5E22B4008C8940 /* Images.xcassets */; };
 		C1F28AD91B5E22B4008C8940 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1F28AD71B5E22B4008C8940 /* LaunchScreen.xib */; };
 		C1F28AFF1B5E3389008C8940 /* CropImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F28AFE1B5E3389008C8940 /* CropImageViewController.m */; };
-		C1F28B011B5E3791008C8940 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = C1F28B001B5E3791008C8940 /* image.png */; };
 		C1F28B051B5F318E008C8940 /* CropImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F28B041B5F318E008C8940 /* CropImageView.m */; };
-		C1F28B071B5F6D53008C8940 /* Square.png in Resources */ = {isa = PBXBuildFile; fileRef = C1F28B061B5F6D53008C8940 /* Square.png */; };
 		E4BE13C60485295412A7EE43 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCA7CE32E67994B624DF78D6 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		154B022EB33F9E73DA2B28E8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		C13FFD511B69E9AD00DF756D /* default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default.jpg; sourceTree = "<group>"; };
+		C13FFD521B69E9AD00DF756D /* landscape.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = landscape.jpg; sourceTree = "<group>"; };
+		C13FFD531B69E9AD00DF756D /* panorama.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = panorama.jpg; sourceTree = "<group>"; };
+		C13FFD541B69E9AD00DF756D /* portrait.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = portrait.jpg; sourceTree = "<group>"; };
+		C13FFD5B1B69EF3900DF756D /* square.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square.jpg; sourceTree = "<group>"; };
 		C1A4815D1B65C8EE003B2AE9 /* ImageEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageEditorView.h; sourceTree = "<group>"; };
 		C1A4815E1B65C8EE003B2AE9 /* ImageEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageEditorView.m; sourceTree = "<group>"; };
 		C1A481601B66214D003B2AE9 /* DetailImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailImageViewController.h; sourceTree = "<group>"; };
@@ -35,10 +43,8 @@
 		C1F28AD81B5E22B4008C8940 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		C1F28AFD1B5E3389008C8940 /* CropImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropImageViewController.h; sourceTree = "<group>"; };
 		C1F28AFE1B5E3389008C8940 /* CropImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropImageViewController.m; sourceTree = "<group>"; };
-		C1F28B001B5E3791008C8940 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		C1F28B031B5F318E008C8940 /* CropImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropImageView.h; sourceTree = "<group>"; };
 		C1F28B041B5F318E008C8940 /* CropImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropImageView.m; sourceTree = "<group>"; };
-		C1F28B061B5F6D53008C8940 /* Square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Square.png; sourceTree = "<group>"; };
 		D9F680152C399F1E8B64BC7F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		FCA7CE32E67994B624DF78D6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -70,6 +76,18 @@
 				FCA7CE32E67994B624DF78D6 /* libPods.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C13FFD501B69E32200DF756D /* Image_Source */ = {
+			isa = PBXGroup;
+			children = (
+				C13FFD5B1B69EF3900DF756D /* square.jpg */,
+				C13FFD511B69E9AD00DF756D /* default.jpg */,
+				C13FFD521B69E9AD00DF756D /* landscape.jpg */,
+				C13FFD531B69E9AD00DF756D /* panorama.jpg */,
+				C13FFD541B69E9AD00DF756D /* portrait.jpg */,
+			);
+			name = Image_Source;
 			sourceTree = "<group>";
 		};
 		C1F28ABC1B5E22B4008C8940 = {
@@ -107,8 +125,7 @@
 		C1F28AC81B5E22B4008C8940 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				C1F28B061B5F6D53008C8940 /* Square.png */,
-				C1F28B001B5E3791008C8940 /* image.png */,
+				C13FFD501B69E32200DF756D /* Image_Source */,
 				C1F28AC91B5E22B4008C8940 /* Info.plist */,
 				C1F28ACA1B5E22B4008C8940 /* main.m */,
 			);
@@ -198,8 +215,11 @@
 			files = (
 				C1F28AD91B5E22B4008C8940 /* LaunchScreen.xib in Resources */,
 				C1F28AD61B5E22B4008C8940 /* Images.xcassets in Resources */,
-				C1F28B071B5F6D53008C8940 /* Square.png in Resources */,
-				C1F28B011B5E3791008C8940 /* image.png in Resources */,
+				C13FFD591B69E9AD00DF756D /* portrait.jpg in Resources */,
+				C13FFD5C1B69EF3900DF756D /* square.jpg in Resources */,
+				C13FFD561B69E9AD00DF756D /* default.jpg in Resources */,
+				C13FFD581B69E9AD00DF756D /* panorama.jpg in Resources */,
+				C13FFD571B69E9AD00DF756D /* landscape.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
