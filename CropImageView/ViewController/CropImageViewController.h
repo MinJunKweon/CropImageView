@@ -6,13 +6,13 @@
 //  Copyright (c) 2015년 1000732. All rights reserved.
 //
 
-@class ImageEditorView;
+@class ImageCropView;
 
 #import <UIKit/UIKit.h>
 
 @interface CropImageViewController : UIViewController
 
-@property (nonatomic, strong) ImageEditorView *imageEditorView;
+@property (nonatomic, strong) ImageCropView *imageEditorView;
 
 @property (nonatomic, strong) UIButton *doneButton;
 @property (nonatomic, strong) UILabel *ltrbLabel;

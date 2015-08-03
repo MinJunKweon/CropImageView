@@ -8,13 +8,14 @@
 
 #import "CropImageViewController.h"
 //#import "CropImageView.h"
-#import "ImageEditorView.h"
+//#import "ImageEditorView.h"
+#import "ImageCropView.h"
 
 #import "DetailImageViewController.h"
 
 #import <Masonry/Masonry.h>
 
-@interface CropImageViewController () <ImageEditorViewDelegate>
+@interface CropImageViewController () <ImageCropViewDelegate>
 
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UIView *containerView;
@@ -29,7 +30,7 @@
 {
     self = [super init];
     if (self) {
-        _imageEditorView = [[ImageEditorView alloc] init];
+        _imageEditorView = [[ImageCropView alloc] init];
         _containerView = [[UIView alloc] init];
         
         _doneButton = [[UIButton alloc] init];
@@ -45,9 +46,9 @@
 
 - (void)initialize
 {
-    _image = [UIImage imageNamed:@"landscape.jpg"];
+    _image = [UIImage imageNamed:@"square.jpg"];
     _imageEditorView.image = _image;
-    _imageEditorView.maximumScale = 2.0f;
+//    _imageEditorView.maximumScale = 2.0f;
     _imageEditorView.delegate = self;
     
     _containerView.backgroundColor = [UIColor clearColor];
@@ -137,11 +138,12 @@
 
 #pragma mark - Image Editor Delegate
 
-- (void)imageEditorViewDidCropped:(ImageEditorView *)imageEditorView rect:(CGRect)rect
+//- (void)imageEditorViewDidCropped:(ImageEditorView *)imageEditorView rect:(CGRect)rect
+- (void)imageCropView:(ImageCropView *)imageCropView didCroppedWithRect:(CGRect)cropRect
 {
-    _ltrbLabel.text = [NSString stringWithFormat:@"%@", NSStringFromCGRect(rect)];
+    _ltrbLabel.text = [NSString stringWithFormat:@"%@", NSStringFromCGRect(cropRect)];
 
-    DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image rect:rect];
+    DetailImageViewController *detailViewController = [[DetailImageViewController alloc] initWithImage:_image rect:cropRect];
     [self presentViewController:detailViewController animated:NO completion:nil];
 }
 

@@ -14,6 +14,7 @@
 		C13FFD5C1B69EF3900DF756D /* square.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C13FFD5B1B69EF3900DF756D /* square.jpg */; };
 		C1A4815F1B65C8EE003B2AE9 /* ImageEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A4815E1B65C8EE003B2AE9 /* ImageEditorView.m */; };
 		C1A481621B66214D003B2AE9 /* DetailImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A481611B66214D003B2AE9 /* DetailImageViewController.m */; };
+		C1F20C211B6F0F2E00B3219E /* ImageCropView.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F20C201B6F0F2E00B3219E /* ImageCropView.m */; };
 		C1F28ACB1B5E22B4008C8940 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F28ACA1B5E22B4008C8940 /* main.m */; };
 		C1F28ACE1B5E22B4008C8940 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F28ACD1B5E22B4008C8940 /* AppDelegate.m */; };
 		C1F28AD61B5E22B4008C8940 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1F28AD51B5E22B4008C8940 /* Images.xcassets */; };
@@ -34,6 +35,8 @@
 		C1A4815E1B65C8EE003B2AE9 /* ImageEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageEditorView.m; sourceTree = "<group>"; };
 		C1A481601B66214D003B2AE9 /* DetailImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailImageViewController.h; sourceTree = "<group>"; };
 		C1A481611B66214D003B2AE9 /* DetailImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailImageViewController.m; sourceTree = "<group>"; };
+		C1F20C1F1B6F0F2E00B3219E /* ImageCropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCropView.h; sourceTree = "<group>"; };
+		C1F20C201B6F0F2E00B3219E /* ImageCropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCropView.m; sourceTree = "<group>"; };
 		C1F28AC51B5E22B4008C8940 /* CropImageView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CropImageView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1F28AC91B5E22B4008C8940 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C1F28ACA1B5E22B4008C8940 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -150,6 +153,8 @@
 				C1F28B041B5F318E008C8940 /* CropImageView.m */,
 				C1A4815D1B65C8EE003B2AE9 /* ImageEditorView.h */,
 				C1A4815E1B65C8EE003B2AE9 /* ImageEditorView.m */,
+				C1F20C1F1B6F0F2E00B3219E /* ImageCropView.h */,
+				C1F20C201B6F0F2E00B3219E /* ImageCropView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -263,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1F20C211B6F0F2E00B3219E /* ImageCropView.m in Sources */,
 				C1F28B051B5F318E008C8940 /* CropImageView.m in Sources */,
 				C1F28AFF1B5E3389008C8940 /* CropImageViewController.m in Sources */,
 				C1F28ACE1B5E22B4008C8940 /* AppDelegate.m in Sources */,
