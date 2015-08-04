@@ -117,12 +117,12 @@
 
 - (void)pause
 {
-    self.userInteractionEnabled = NO;
+    _scrollView.scrollEnabled = NO;
 }
 
 - (void)resume
 {
-    self.userInteractionEnabled = YES;
+    _scrollView.scrollEnabled = YES;
 }
 
 - (void)reset:(BOOL)animated
