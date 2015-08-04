@@ -24,6 +24,6 @@
 
 @property (weak, nonatomic) id<ImageCropViewDelegate> delegate;
 
-- (void)crop;
+- (CGRect)crop;
 
 @end

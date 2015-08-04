@@ -151,7 +151,7 @@
     [_scrollView setContentOffset:contentOffset animated:animated];
 }
 
-- (void)crop
+- (CGRect)crop
 {
     CGFloat heightScale = _image.size.width / self.frame.size.width;
     CGFloat widthScale = _image.size.height / self.frame.size.height;
@@ -166,6 +166,7 @@
     if ([_delegate respondsToSelector:@selector(imageCropView:didCroppedWithRect:)]) {
         [_delegate imageCropView:self didCroppedWithRect:cropRect];
     }
+    return cropRect;
 }
 
 @end
