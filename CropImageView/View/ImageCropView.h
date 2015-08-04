@@ -20,6 +20,7 @@
 
 @property (nonatomic) BOOL tapToResetEnabled;
 @property (nonatomic, strong) UIImage *image;
+@property (nonatomic) CGFloat maximumScale;
 
 @property (weak, nonatomic) id<ImageCropViewDelegate> delegate;
 
