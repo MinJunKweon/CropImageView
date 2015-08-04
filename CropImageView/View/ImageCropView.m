@@ -85,18 +85,24 @@
     [self resetFrame];
 }
 
-
 - (void)resetFrame
 {
-    _scrollView.frame = self.frame;
+    [self resume];
+    
+    _scrollView.frame = self.bounds;
+    
+    _imageScale = MIN(_image.size.width / self.bounds.size.width,
+                      _image.size.height / self.bounds.size.height);
+    
+    CGSize imageViewSize = CGSizeMake(_image.size.width / _imageScale,
+                                      _image.size.height / _imageScale);
+    
+    _scrollView.contentSize = imageViewSize;
     _imageView.frame = CGRectMake(0, 0,
-                                  _scrollView.bounds.size.width + _scrollView.bounds.origin.x * 2,
-                                  _scrollView.bounds.size.height + _scrollView.bounds.origin.y * 2);
-    _imageScale = MIN(_image.size.width / _imageView.frame.size.width,
-                      _image.size.height / _imageView.frame.size.height);
-    _scrollView.contentSize = CGSizeMake(_image.size.width / _imageScale, _image.size.height / _imageScale);
-    _scrollView.contentOffset = CGPointMake((_scrollView.contentSize.width - _scrollView.bounds.size.width) / 2,
-                                            (_scrollView.contentSize.height - _scrollView.bounds.size.height) / 2);
+                                  imageViewSize.width,
+                                  imageViewSize.height);
+    _scrollView.contentOffset = CGPointMake((imageViewSize.width - _scrollView.frame.size.width) / 2,
+                                            (imageViewSize.height - _scrollView.frame.size.height) / 2);
 }
 
 #pragma mark - Scroll View Delegate
